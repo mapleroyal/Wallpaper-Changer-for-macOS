@@ -66,7 +66,7 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 406,
     height: 965,
-    vibrancy: "under-window",
+    vibrancy: "fullscreen-ui", // use "under-window" for a more subtle effect
     webPreferences: {
       preload: join(__dirname, "preload.js"),
       nodeIntegration: false,
