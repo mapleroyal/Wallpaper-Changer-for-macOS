@@ -47,11 +47,14 @@ npm run dev
 ```
 That will build the app in a temporary state, and launch it for immediate use and development (with hot-reloading).
 
-#### NOTE:
+#### 🚨 NOTE:
 
 The app looks for wallpapers in these two directories:
+
 ~/Pictures/wallpapers/dark
+
 ~/Pictures/wallpapers/light
+
 Support for subdirectories is on the roadmap.
 
 ## License
