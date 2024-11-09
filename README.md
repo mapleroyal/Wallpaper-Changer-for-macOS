@@ -57,9 +57,19 @@ The app looks for wallpapers in these two directories:
 
 Support for custom directories and subdirectories is on the roadmap.
 
+## Documentation
+
+This app uses ImageMagick on the backend to manipulate images, and sends the command
+
+`/usr/libexec/PlistBuddy -c "set AllSpacesAndDisplays:Desktop:Content:Choices:0:Files:0:relative file:///${wallpaperPath}" "${plistPath}" && killall WallpaperAgent`
+
+to set the wallpaper on all spaces and displays.
+
+In this MVP, all functionality is contained in the home view component `src/renderer/components/Home.vue` and the main process file `src/main/main.ts`.
+
 ## License
 
-This project is licensed under the GPL2 License, with parts from the MIT License. See the LICENSE file for details.
+This project is licensed under the GPL2 License, with some of the template using the MIT License. See the LICENSE file for details.
 
 ## Acknowledgments
 
@@ -69,7 +79,7 @@ This project is licensed under the GPL2 License, with parts from the MIT License
 
 **Short term**:
 - [ ] Get all features (at this point, basically the effects) working in a production build like they do in dev.
-- [ ] Add buttons to reset the sliders to their default values.
+- [x] Add buttons to reset the sliders to their default values.
 - [ ] Allow the app to run in the menu bar for quick access.
   - [ ] Menu bar item context menu
   - [ ] Automatic cycling on a schedule

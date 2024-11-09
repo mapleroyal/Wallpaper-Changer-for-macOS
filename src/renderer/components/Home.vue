@@ -26,8 +26,8 @@ interface WallpaperSettings {
   };
 }
 
-// Initialize default settings for wallpaper modifications
-const settings = ref<WallpaperSettings>({
+// Default settings to use for reset functionality
+const DEFAULT_SETTINGS: WallpaperSettings = {
   pixelate: {
     scale: 6,
     colors: 24,
@@ -38,7 +38,10 @@ const settings = ref<WallpaperSettings>({
   darken: {
     amount: 50,
   },
-});
+};
+
+// Initialize settings with default values
+const settings = ref<WallpaperSettings>(JSON.parse(JSON.stringify(DEFAULT_SETTINGS)));
 
 // Tracks the selected wallpaper type (light/dark/null for either)
 const selectedWallpaperType = ref<string | null>(null);
@@ -63,6 +66,14 @@ const applyWallpaper = () => {
   } else {
     sendCommand("apply_new_wallpaper");
   }
+};
+
+/**
+ * Resets the settings for a specific effect to their default values
+ * @param effect - The effect to reset ('pixelate' | 'blur' | 'darken')
+ */
+const resetEffect = (effect: keyof WallpaperSettings) => {
+  settings.value[effect] = JSON.parse(JSON.stringify(DEFAULT_SETTINGS[effect]));
 };
 </script>
 
@@ -101,7 +112,10 @@ const applyWallpaper = () => {
             <span>{{ settings.pixelate.colors }}</span>
           </label>
         </div>
-        <button @click="sendCommand('pixelate_wallpaper', { ...settings.pixelate })">Apply</button>
+        <div class="button-row">
+          <button class="reset-button" @click="resetEffect('pixelate')">Reset</button>
+          <button @click="sendCommand('pixelate_wallpaper', { ...settings.pixelate })">Apply</button>
+        </div>
       </div>
 
       <!-- Blur Effect Controls -->
@@ -114,7 +128,10 @@ const applyWallpaper = () => {
             <span>{{ settings.blur.radius }}</span>
           </label>
         </div>
-        <button @click="sendCommand('blur_wallpaper', { ...settings.blur })">Apply</button>
+        <div class="button-row">
+          <button class="reset-button" @click="resetEffect('blur')">Reset</button>
+          <button @click="sendCommand('blur_wallpaper', { ...settings.blur })">Apply</button>
+        </div>
       </div>
 
       <!-- Darkening Effect Controls -->
@@ -127,7 +144,10 @@ const applyWallpaper = () => {
             <span>{{ settings.darken.amount }}%</span>
           </label>
         </div>
-        <button @click="sendCommand('darken_wallpaper', { ...settings.darken })">Apply</button>
+        <div class="button-row">
+          <button class="reset-button" @click="resetEffect('darken')">Reset</button>
+          <button @click="sendCommand('darken_wallpaper', { ...settings.darken })">Apply</button>
+        </div>
       </div>
     </section>
 
@@ -187,6 +207,12 @@ h3 {
   align-items: center;
 }
 
+.button-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
 .radio-group {
   display: flex;
   flex-direction: column;
@@ -239,6 +265,14 @@ button:hover {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+.reset-button {
+  background-color: #3f3f3f;
+}
+
+.reset-button:hover {
+  background-color: #4f4f4f;
+}
+
 /* Light mode styles */
 @media (prefers-color-scheme: light) {
   .control-section {
@@ -258,6 +292,14 @@ button:hover {
   button:hover {
     background-color: #e0e0e0;
     border-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .reset-button {
+    background-color: #c5c5c5;
+  }
+
+  .reset-button:hover {
+    background-color: #e0e0e0;
   }
 }
 </style>
