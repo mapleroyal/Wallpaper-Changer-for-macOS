@@ -67,6 +67,8 @@ to set the wallpaper on all spaces and displays.
 
 In this MVP, all functionality is contained in the home view component `src/renderer/components/Home.vue` and the main process file `src/main/main.ts`.
 
+- 
+
 ## License
 
 This project is licensed under the GPL2 License, with some of the template using the MIT License. See the LICENSE file for details.

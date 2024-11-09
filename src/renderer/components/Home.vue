@@ -137,7 +137,15 @@ const resetEffect = (effect: keyof WallpaperSettings) => {
       <!-- Darkening Effect Controls -->
       <div class="effect-control no-bottom-margin">
         <h3>Darken</h3>
-        <div class="input-group">
+        <div class="input-group no-gap">
+          <div class="darken-icons-container">
+            <div></div>
+            <span>🌙</span>
+            <div></div>
+            <div></div>
+            <span>🔆</span>
+            <div></div>
+          </div>
           <label>
             Amount:
             <input type="range" v-model="settings.darken.amount" min="0" max="100" step="5" />
@@ -227,12 +235,22 @@ h3 {
   margin-bottom: 20px;
 }
 
+.darken-icons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -10px;
+}
+
 /* Input styling and layout */
 .input-group {
   display: flex;
   flex-direction: column;
   gap: 15px;
   margin-bottom: 15px;
+}
+
+.no-gap {
+  gap: 0;
 }
 
 label {

@@ -65,7 +65,7 @@ const setWallpaper = async (wallpaperPath: string) => {
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 406,
-    height: 965,
+    height: 975,
     vibrancy: "fullscreen-ui", // use "under-window" for a more subtle effect
     webPreferences: {
       preload: join(__dirname, "preload.js"),
