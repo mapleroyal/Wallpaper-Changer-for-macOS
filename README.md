@@ -47,6 +47,13 @@ npm run dev
 ```
 That will build the app in a temporary state, and launch it for immediate use and development (with hot-reloading).
 
+#### NOTE:
+
+The app looks for wallpapers in these two directories:
+~/Pictures/wallpapers/dark
+~/Pictures/wallpapers/light
+Support for subdirectories is on the roadmap.
+
 ## License
 
 This project is licensed under the GPL2 License, with parts from the MIT License. See the LICENSE file for details.
@@ -67,7 +74,8 @@ This project is licensed under the GPL2 License, with parts from the MIT License
 
 **Longer term**:
 - [ ] Allow to set a wallpaper by dragging it into the app. (There are simpler and even built-in ways to set a wallpaper, but they don't set it across all spaces on all monitors.)
-- [ ] Allow to specify directories instead of using my default preference.
+- [ ] User-specified directories.
+  - [ ] Support for subdirectories.
   - [ ] In this case, allow to select multiple directories to find a random wallpaper from.
 - [ ] Automatically darken/lighten the wallpaper when the system light/dark state changes.
 
