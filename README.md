@@ -55,7 +55,7 @@ The app looks for wallpapers in these two directories:
 
 ~/Pictures/wallpapers/light
 
-Support for subdirectories is on the roadmap.
+Support for custom directories and subdirectories is on the roadmap.
 
 ## License
 
