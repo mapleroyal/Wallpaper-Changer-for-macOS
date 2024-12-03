@@ -29,7 +29,7 @@ interface WallpaperSettings {
 // Default settings to use for reset functionality
 const DEFAULT_SETTINGS: WallpaperSettings = {
   pixelate: {
-    scale: 6,
+    scale: 10,
     colors: 24,
   },
   blur: {

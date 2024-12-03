@@ -1,8 +1,8 @@
+process.env.NODE_ENV = process.env.NODE_ENV || "production"; // Ensure it's always defined
 import { app, BrowserWindow, ipcMain, session } from "electron";
 import { join } from "path";
 import { exec } from "child_process";
 import { promises as fs } from "fs";
-import { homedir } from "os";
 
 // ==============================
 // Types and Interfaces
@@ -16,9 +16,9 @@ interface CommandPayload {
 // Constants
 // ==============================
 // Directory and file paths for wallpaper management
-const WALLPAPER_DIR = join(homedir(), "Pictures", "wallpapers");
-const UNMODIFIED_WALLPAPER = join(WALLPAPER_DIR, "current_wallpaper_unmodified.jpg");
-const MODIFIED_WALLPAPER = join(WALLPAPER_DIR, "current_wallpaper_modified.jpg");
+const WALLPAPER_DIR = "/Users/user1/Pictures/wallpapers";
+const UNMODIFIED_WALLPAPER = "/Users/user1/Pictures/wallpapers/current_wallpaper_unmodified.jpg";
+const MODIFIED_WALLPAPER = "/Users/user1/Pictures/wallpapers/current_wallpaper_modified.jpg";
 const BLACK_WALLPAPER = "/tmp/black_wallpaper.png";
 
 // ==============================
@@ -47,11 +47,10 @@ const executeCommand = (command: string): Promise<void> => {
  * Sets the macOS wallpaper using PlistBuddy
  * @param wallpaperPath - Path to the wallpaper image file
  */
+console.log(`process.env.HOME: ${process.env.HOME}`);
 const setWallpaper = async (wallpaperPath: string) => {
-  const plistPath = join(
-    process.env.HOME || "",
-    "Library/Application Support/com.apple.wallpaper/Store/Index.plist"
-  );
+  const plistPath = "/Users/user1/Library/Application Support/com.apple.wallpaper/Store/Index.plist";
+  console.log(`plistPath: ${plistPath}`);
   const command = `/usr/libexec/PlistBuddy -c "set AllSpacesAndDisplays:Desktop:Content:Choices:0:Files:0:relative file:///${wallpaperPath}" "${plistPath}" && killall WallpaperAgent`;
   await executeCommand(command);
 };
@@ -76,11 +75,18 @@ function createWindow() {
 
   // Load appropriate URL based on environment
   if (process.env.NODE_ENV === "development") {
+    console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
+    console.log(`process.argv: ${process.argv}`);
     const rendererPort = process.argv[2];
     mainWindow.loadURL(`http://localhost:${rendererPort}`);
   } else {
-    mainWindow.loadFile(join(app.getAppPath(), "renderer", "index.html"));
+    console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
+    console.log(`process.argv: ${process.argv}`);
+    console.log(`__dirname: ${__dirname}`);
+    mainWindow.loadFile(join(__dirname, "../renderer", "index.html"));
   }
+
+  mainWindow.webContents.openDevTools();
 }
 
 // ==============================
@@ -116,6 +122,8 @@ app.on("window-all-closed", function () {
 // IPC Command Handlers
 // ==============================
 ipcMain.on("command", async (event, payload: CommandPayload) => {
+  console.log(`TESTING WHETHER THIS FUNCTION IS CALLED`);
+  console.log(`Received command: ${payload.command}`);
   const { command, args = {} } = payload;
 
   try {

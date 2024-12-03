@@ -1,6 +1,19 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld("electronAPI", {
-  sendCommand: (payload: { command: string; args?: Record<string, any> }) =>
-    ipcRenderer.send("command", payload),
+console.log(`Preload script loaded in ${process.env.NODE_ENV} mode`);
+
+try {
+  contextBridge.exposeInMainWorld("electronAPI", {
+    sendCommand: (payload) => {
+      ipcRenderer.send("command", payload);
+    },
+    env: { NODE_ENV: process.env.NODE_ENV },
+  });
+} catch (error) {
+  console.error("Error in preload script:", error);
+}
+
+window.addEventListener("error", (event) => {
+  // Catch any other errors
+  console.error("Uncaught Error in preload:", event.error);
 });
