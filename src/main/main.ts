@@ -3,6 +3,7 @@ import { app, BrowserWindow, ipcMain, session } from "electron";
 import { join } from "path";
 import { exec } from "child_process";
 import { promises as fs } from "fs";
+import { homedir } from "os";
 
 // ==============================
 // Types and Interfaces
