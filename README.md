@@ -20,26 +20,21 @@ Lightweight app for setting wallpapers on all spaces of all displays.
 
 This project currently only works completely in development. In production, the main features (applying/removing various effects) don't yet.
 
-1. **Install ImageMagick on your machine**
-```bash
-brew install imagemagick
-```
-
-2. **Get a local copy of this project**
+1. **Get a local copy of this project**
 
 Clone this repo by copying the URL here, then running:
 ```bash
 git clone theURL
 ```
 
-3. **Install the dependencies**
+2. **Install the dependencies**
 
 Navigate your terminal to the newly created project directory, then run:
 ```bash
 npm install
 ```
 
-4. **Run the development build**:
+3. **Run the development build**:
 
 From the project directory, run:
 ```bash
@@ -67,20 +62,19 @@ to set the wallpaper on all spaces and displays.
 
 In this MVP, all functionality is contained in the home view component `src/renderer/components/Home.vue` and the main process file `src/main/main.ts`.
 
-- 
-
 ## License
 
 This project is licensed under the GPL2 License, with some of the template using the MIT License. See the LICENSE file for details.
 
 ## Acknowledgments
 
-- electron-vue-template by Deluze
+- electron-vue-template by Deluze https://github.com/Deluze/electron-vue-template?tab=MIT-1-ov-file
+- imagemagick https://imagemagick.org/script/license.php
 
 ## Roadmap
 
 **Short term**:
-- [ ] Get all features (at this point, basically the effects) working in a production build like they do in dev.
+- [x] Get all features (at this point, basically the effects) working in a production build like they do in dev.
 - [x] Add buttons to reset the sliders to their default values.
 - [ ] Allow the app to run in the menu bar for quick access.
   - [ ] Menu bar item context menu
