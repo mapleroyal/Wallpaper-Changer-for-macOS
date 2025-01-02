@@ -4,6 +4,7 @@ import { join } from "path";
 import { exec } from "child_process";
 import { promises as fs } from "fs";
 import { homedir } from "os";
+import path = require("path");
 
 // ==============================
 // Types and Interfaces
@@ -21,6 +22,7 @@ const WALLPAPER_DIR = "/Users/user1/Pictures/wallpapers";
 const UNMODIFIED_WALLPAPER = "/Users/user1/Pictures/wallpapers/current_wallpaper_unmodified.jpg";
 const MODIFIED_WALLPAPER = "/Users/user1/Pictures/wallpapers/current_wallpaper_modified.jpg";
 const BLACK_WALLPAPER = "/tmp/black_wallpaper.png";
+const MAGICK_PATH = path.join(app.getAppPath(), "static/bin/magick");
 
 // ==============================
 // Utility Functions
@@ -87,7 +89,7 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, "../renderer", "index.html"));
   }
 
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools(); // Uncomment to open DevTools by default
 }
 
 // ==============================
@@ -164,9 +166,9 @@ ipcMain.on("command", async (event, payload: CommandPayload) => {
 
       // Apply pixelation effect to current wallpaper
       case "pixelate_wallpaper": {
-        const { scale = 6, colors = 24 } = args;
+        const { scale, colors } = args;
         await executeCommand(
-          `magick "${UNMODIFIED_WALLPAPER}" -scale ${scale}% -colors ${colors} -scale 1667% "${MODIFIED_WALLPAPER}"`
+          `${MAGICK_PATH} "${UNMODIFIED_WALLPAPER}" -scale ${scale}% -colors ${colors} -scale 1667% "${MODIFIED_WALLPAPER}"`
         );
         await setWallpaper(MODIFIED_WALLPAPER);
         console.log("Wallpaper pixelated successfully.");
@@ -175,24 +177,39 @@ ipcMain.on("command", async (event, payload: CommandPayload) => {
 
       // Apply blur effect to current wallpaper
       case "blur_wallpaper": {
-        const { radius = 65 } = args;
-        await executeCommand(`magick "${UNMODIFIED_WALLPAPER}" -blur 0x${radius} "${MODIFIED_WALLPAPER}"`);
+        const { radius } = args;
+        await executeCommand(
+          `${MAGICK_PATH} "${UNMODIFIED_WALLPAPER}" -blur 0x${radius} "${MODIFIED_WALLPAPER}"`
+        );
         await setWallpaper(MODIFIED_WALLPAPER);
         console.log("Wallpaper blurred successfully.");
         break;
       }
 
-      // Darken current wallpaper
+      // Apply darken effect to current wallpaper
       case "darken_wallpaper": {
-        const { amount = 30 } = args;
+        const { amount } = args;
+        const transparency = Math.max(0, Math.min(1, amount / 100)); // Ensure the transparency value is between 0 and 1
         const wallpaperToDarken = (await fs.stat(MODIFIED_WALLPAPER).catch(() => false))
           ? MODIFIED_WALLPAPER
           : UNMODIFIED_WALLPAPER;
-        await executeCommand(
-          `magick "${wallpaperToDarken}" -modulate ${amount},100,100 "${MODIFIED_WALLPAPER}"`
-        );
+
+        const dimensionsCommand = `${MAGICK_PATH} identify -format "%wx%h" "${wallpaperToDarken}"`;
+        const dimensions = await new Promise<string>((resolve, reject) => {
+          exec(dimensionsCommand, (error, stdout) => {
+            if (error) {
+              reject(new Error(`Failed to get image dimensions: ${error.message}`));
+            } else {
+              resolve(stdout.trim());
+            }
+          });
+        });
+
+        const overlayCommand = `${MAGICK_PATH} "${wallpaperToDarken}" \\( -size ${dimensions} xc:"rgba(0,0,0,${transparency})" \\) -compose over -composite "${MODIFIED_WALLPAPER}"`;
+        await executeCommand(overlayCommand);
+
         await setWallpaper(MODIFIED_WALLPAPER);
-        console.log("Wallpaper darkened successfully.");
+        console.log("Wallpaper darkened successfully using new method.");
         break;
       }
 
@@ -211,7 +228,7 @@ ipcMain.on("command", async (event, payload: CommandPayload) => {
 
       // Set solid black wallpaper
       case "set_black_wallpaper":
-        await executeCommand(`magick -size 1x1 xc:black "${BLACK_WALLPAPER}"`);
+        await executeCommand(`${MAGICK_PATH} -size 1x1 xc:black "${BLACK_WALLPAPER}"`);
         await setWallpaper(BLACK_WALLPAPER);
         console.log("Black wallpaper set successfully.");
         break;

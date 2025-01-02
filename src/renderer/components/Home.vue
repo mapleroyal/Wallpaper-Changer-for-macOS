@@ -44,7 +44,7 @@ const DEFAULT_SETTINGS: WallpaperSettings = {
 const settings = ref<WallpaperSettings>(JSON.parse(JSON.stringify(DEFAULT_SETTINGS)));
 
 // Tracks the selected wallpaper type (light/dark/null for either)
-const selectedWallpaperType = ref<string | null>(null);
+const selectedWallpaperType = ref<string | null>("");
 
 /**
  * Sends a command to the Electron backend
@@ -86,8 +86,8 @@ const resetEffect = (effect: keyof WallpaperSettings) => {
         <!-- Wallpaper type selection radio buttons -->
         <div class="radio-group">
           <label>🤷‍♂️ <input type="radio" v-model="selectedWallpaperType" value="" />Either </label>
-          <label>🔆 <input type="radio" v-model="selectedWallpaperType" value="light" />Light </label>
-          <label>🌙 <input type="radio" v-model="selectedWallpaperType" value="dark" />Dark </label>
+          <label>🌞 <input type="radio" v-model="selectedWallpaperType" value="light" />Light </label>
+          <label>🌚 <input type="radio" v-model="selectedWallpaperType" value="dark" />Dark </label>
         </div>
         <button @click="applyWallpaper">Apply</button>
       </div>
@@ -140,10 +140,10 @@ const resetEffect = (effect: keyof WallpaperSettings) => {
         <div class="input-group no-gap">
           <div class="darken-icons-container">
             <div></div>
-            <span>🌙</span>
+            <span>🌞</span>
             <div></div>
             <div></div>
-            <span>🔆</span>
+            <span>🌚</span>
             <div></div>
           </div>
           <label>
