@@ -3,8 +3,6 @@ import { app, BrowserWindow, ipcMain, session } from "electron";
 import { join } from "path";
 import { exec } from "child_process";
 import { promises as fs } from "fs";
-import { homedir } from "os";
-import path = require("path");
 
 // ==============================
 // Types and Interfaces
@@ -22,7 +20,7 @@ const WALLPAPER_DIR = "/Users/user1/Pictures/wallpapers";
 const UNMODIFIED_WALLPAPER = "/Users/user1/Pictures/wallpapers/current_wallpaper_unmodified.jpg";
 const MODIFIED_WALLPAPER = "/Users/user1/Pictures/wallpapers/current_wallpaper_modified.jpg";
 const BLACK_WALLPAPER = "/tmp/black_wallpaper.png";
-const MAGICK_PATH = path.join(app.getAppPath(), "static/bin/magick");
+const MAGICK_PATH = join(app.getAppPath(), "static/bin/magick");
 
 // ==============================
 // Utility Functions
