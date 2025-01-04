@@ -1,7 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
 
-console.log(`Preload script loaded in ${process.env.NODE_ENV} mode`);
-
 try {
   contextBridge.exposeInMainWorld("electronAPI", {
     sendCommand: (payload) => {

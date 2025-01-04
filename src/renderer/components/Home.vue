@@ -46,6 +46,9 @@ const settings = ref<WallpaperSettings>(JSON.parse(JSON.stringify(DEFAULT_SETTIN
 // Tracks the selected wallpaper type (light/dark/null for either)
 const selectedWallpaperType = ref<string | null>("");
 
+// State for the system mode toggle button
+const isDarkMode = ref(false);
+
 /**
  * Sends a command to the Electron backend
  * @param command - The command identifier
@@ -53,7 +56,6 @@ const selectedWallpaperType = ref<string | null>("");
  */
 const sendCommand = (command: string, args?: Record<string, any>) => {
   const serializedArgs = args ? JSON.parse(JSON.stringify(args)) : undefined;
-  console.log("Sending command:", command, serializedArgs); // Debug log
   window.electronAPI.sendCommand({ command, args: serializedArgs });
 };
 
@@ -108,14 +110,15 @@ const resetEffect = (effect: keyof WallpaperSettings) => {
           </label>
           <label>
             Colors:
-            <input type="range" v-model="settings.pixelate.colors" min="2" max="256" step="2" />
+            <input type="range" v-model="settings.pixelate.colors" min="2" max="256" step="1" />
             <span>{{ settings.pixelate.colors }}</span>
           </label>
         </div>
         <div class="button-row">
-          <button class="reset-button" @click="resetEffect('pixelate')">Reset</button>
+          <button class="reset-button" @click="resetEffect('pixelate')">Reset Sliders</button>
           <button @click="sendCommand('pixelate_wallpaper', { ...settings.pixelate })">Apply</button>
         </div>
+        <p><strong>Replaces</strong> existing modifications</p>
       </div>
 
       <!-- Blur Effect Controls -->
@@ -124,14 +127,15 @@ const resetEffect = (effect: keyof WallpaperSettings) => {
         <div class="input-group">
           <label>
             Radius:
-            <input type="range" v-model="settings.blur.radius" min="0" max="100" step="5" />
+            <input type="range" v-model="settings.blur.radius" min="0" max="100" step="1" />
             <span>{{ settings.blur.radius }}</span>
           </label>
         </div>
         <div class="button-row">
-          <button class="reset-button" @click="resetEffect('blur')">Reset</button>
+          <button class="reset-button" @click="resetEffect('blur')">Reset Slider</button>
           <button @click="sendCommand('blur_wallpaper', { ...settings.blur })">Apply</button>
         </div>
+        <p><strong>Replaces</strong> existing modifications</p>
       </div>
 
       <!-- Darkening Effect Controls -->
@@ -153,9 +157,10 @@ const resetEffect = (effect: keyof WallpaperSettings) => {
           </label>
         </div>
         <div class="button-row">
-          <button class="reset-button" @click="resetEffect('darken')">Reset</button>
+          <button class="reset-button" @click="resetEffect('darken')">Reset Slider</button>
           <button @click="sendCommand('darken_wallpaper', { ...settings.darken })">Apply</button>
         </div>
+        <p><strong>Adds to</strong> existing modifications</p>
       </div>
     </section>
 
@@ -163,8 +168,9 @@ const resetEffect = (effect: keyof WallpaperSettings) => {
     <section class="control-section no-bottom-margin">
       <h2>Miscellaneous</h2>
       <div class="button-group">
-        <button @click="sendCommand('revert_wallpaper')">Revert Modifications</button>
-        <button @click="sendCommand('set_black_wallpaper')">Set Black Wallpaper</button>
+        <button @click="sendCommand('revert_wallpaper')">Restore Unmodified Wallpaper</button>
+        <button @click="sendCommand('set_black_wallpaper')">Black Wallpaper</button>
+        <button @click="sendCommand('toggle_dark_mode')">Toggle System Dark Mode</button>
       </div>
     </section>
   </div>
