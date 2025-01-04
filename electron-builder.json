@@ -1,6 +1,7 @@
 {
   "asar": false,
   "appId": "com.electron.app",
+  "productName": "Wallpaper Changer for macOS",
   "directories": {
     "output": "dist"
   },

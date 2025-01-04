@@ -1,7 +1,7 @@
 {
-  "name": "electron-vue-template",
-  "version": "0.1.0",
-  "description": "A minimal Electron + Vue application",
+  "name": "wallpaper-changer-for-macos",
+  "version": "0.6.0",
+  "description": "Lightweight app for setting wallpapers on all spaces of all displays",
   "main": "main/main.js",
   "scripts": {
     "dev": "node scripts/dev-server.js",
@@ -10,10 +10,10 @@
     "build:mac": "node scripts/build.js && electron-builder --mac",
     "build:linux": "node scripts/build.js && electron-builder --linux"
   },
-  "repository": "https://github.com/deluze/electron-vue-template",
+  "repository": "https://github.com/mapleroyal/Wallpaper-Changer-for-macOS",
   "author": {
-    "name": "Deluze",
-    "url": "https://github.com/Deluze"
+    "name": "mapleroyal",
+    "url": "https://github.com/mapleroyal"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.1",
